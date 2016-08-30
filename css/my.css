@@ -1,0 +1,18 @@
+/*!
+ * =====================================================
+ * 自定义样式
+ * 覆盖部分MSUI样式
+ * 加载在sm.css之后
+ *
+ * 参考：http://m.sui.taobao.org/components/#tabs
+ * =====================================================
+ */
+
+.bar{background-color: #79c34b;}
+.bar a,.bar a span{color:#fff;}
+.title {color:#fff;}
+
+.buttons-tab .button.active {
+    color: #000;
+    border-color: #79c34b;
+}
