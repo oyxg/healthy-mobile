@@ -11,8 +11,21 @@
 .bar{background-color: #79c34b;}
 .bar a,.bar a span{color:#fff;}
 .title {color:#fff;}
+.buttons-tab .button.active { color: #000; border-color: #79c34b;  }
 
-.buttons-tab .button.active {
-    color: #000;
-    border-color: #79c34b;
-}
+.content-block {margin:0;padding:0;}
+
+/* 日期 */
+div.date{background: #fff;text-align: center;}
+div.date input{padding:0.3rem;line-height: inherit;background:none;border: 0;width:6rem;text-align: center;color:#aaa;letter-spacing:0.08rem}
+div.date i{color: #79c34b;}
+div.date i.max{color:#aaa;}
+
+/* 图表 */
+.echart{background:#79c34b;height: 10rem;}
+.echart span{color: #fff;font-size: 0.8rem;margin-top: 0.5rem}
+.echart span.time{margin-left: 0.5rem;float: left;}
+.echart span.date{margin-right: 0.5rem;float: right;}
+.echart-buttom{background:#fff;height: 2.5rem;text-align: center;}
+.echart-buttom h5{margin: 0.25rem auto 0.05rem auto;font-weight: 100;color:#AAA;}
+.echart-buttom p{margin: 0rem;font-weight: 100;font-size: 0.6rem;}

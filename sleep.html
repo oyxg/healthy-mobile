@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="css/sm.css">
     <link rel="stylesheet" href="css/my.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 
 </head>
 <body>
@@ -35,7 +36,33 @@
                 <div class="tabs">
                     <div id="tab1" class="tab active">
                         <div class="content-block">
-                            <p>日</p>
+                            <div class="date">
+                                <i class="fa fa-caret-left"></i>
+                                <input type="text" data-toggle='date' id="day" value="" />
+                                <i class="fa fa-caret-right max"></i>
+                            </div>
+                            <div class="row echart">
+                                <div class="col-100">
+                                    <span class="time">11小时30分钟</span>
+                                    <span class="date">今天</span>
+                                    <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
+                                    <div id="main" style="width: 100%;height:8rem;"></div>
+                                </div>
+                            </div>
+                            <div class="row echart-buttom">
+                                <div class="col-33">
+                                    <h5>睡眠区间</h5>
+                                    <p>21:00-9:00</p>
+                                </div>
+                                <div class="col-33">
+                                    <h5>入睡耗时</h5>
+                                    <p>1小时30分钟</p>
+                                </div>
+                                <div class="col-33">
+                                    <h5>睡眠时长</h5>
+                                    <p>10小时00分钟</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="tab2" class="tab">
@@ -60,11 +87,106 @@
     </div>
 </div>
 
+
 <script type='text/javascript' src='js/zepto.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/sm.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/echarts.min.js' charset='utf-8'></script>
 <script>
     $.init();
+
+    // 页面加载完成后执行函数
+    $(function(){
+        var now = new Date();
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+        $("#day").val(year+'-'+month+'-'+day);
+
+        // 初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        // 指定图表的配置项和数据
+        var option = {
+            grid: {
+                show:true,
+                top:'8%',
+                left: '3%',
+                right: '3%',
+                bottom: '3%',
+                containLabel: true,
+                backgroundColor:'rgba(255, 255, 255, 0.3)',
+                borderColor:'#eee'
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['21:00','22:00', '23:00','24:00', '1:00','2:00', '3:00','4:00', '5:00','6:00', '7:00','8:00', '9:00'],
+                    axisLine: {
+                        lineStyle: {
+                            color:'#eee',
+                            opacity:0.5
+                        }
+                    },
+                    axisTick: {
+                        inside: true,
+                        alignWithLabel: true,
+                        interval:1
+                    },
+                    axisLabel:{
+                        textStyle:{
+                            fontSize:16
+                        }
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    data: ['深睡', '浅睡', '清醒'],
+                    axisLine: {
+                        lineStyle: {
+                            color:'#eee',
+                            opacity:0.5
+                        }
+                    },
+                    axisTick : {show: false},
+                    axisLabel:{
+                        formatter: function (value, index) {
+                            var text = '';
+                            switch (index){
+                                case 1:  text='深睡';break;
+                                case 2:  text='浅睡';break;
+                                case 3:  text='清醒';break;
+                            }
+                            return text;
+                        },
+                        textStyle:{
+                            fontSize:16
+                        }
+                    }
+                }
+            ],
+            series: [{
+                name: '销量',
+                type: 'line',
+                smooth:true,
+                data: [80, 57, 42, 30, 22, 16,20, 23, 32, 34, 46, 60,70],//这里的睡眠数值与小时一一对应由后台程序提供，这里只是演示数据；另外说明下由于Y轴上要划分4个区间，所以区间从0到80，数值越小睡眠程度越深。
+                lineStyle: {
+                    normal:{
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0, color: '#99FFFF' // 0% 处的颜色
+                        }, {offset: 0.2, color: '#99CCFF' // 20% 处的颜色
+                        }, {offset: 0.4, color: '#9999FF' // 40% 处的颜色
+                        }, {offset: 0.6, color: '#996699' // 60% 处的颜色
+                        }, {offset: 0.8, color: '#993399' // 80% 处的颜色
+                        }, {offset: 1, color: '#000066' // 100% 处的颜色
+                        }], false)
+                    }
+                }
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    })
 </script>
 </body>
 </html>

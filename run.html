@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="css/sm.css">
     <link rel="stylesheet" href="css/my.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 
 </head>
 <body>
@@ -34,7 +35,11 @@
                 <div class="tabs">
                     <div id="tab1" class="tab active">
                         <div class="content-block">
-                            <p>周视图</p>
+                            <div class="date">
+                                <i class="fa fa-caret-left"></i>
+                                <input type="text" data-toggle='date' id="day" value="" />
+                                <i class="fa fa-caret-right max"></i>
+                            </div>
                         </div>
                     </div>
                     <div id="tab2" class="tab">
@@ -59,6 +64,15 @@
 <script type='text/javascript' src='js/echarts.min.js' charset='utf-8'></script>
 <script>
     $.init();
+
+    $(function(){
+        var now = new Date();
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+        $("#day").val(year+'-'+month+'-'+day);
+    });
+
 </script>
 </body>
 </html>
