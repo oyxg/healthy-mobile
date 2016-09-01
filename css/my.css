@@ -29,3 +29,18 @@ div.date i.max{color:#aaa;}
 .echart-buttom{background:#fff;height: 2.5rem;text-align: center;}
 .echart-buttom h5{margin: 0.25rem auto 0.05rem auto;font-weight: 100;color:#AAA;}
 .echart-buttom p{margin: 0rem;font-weight: 100;font-size: 0.6rem;}
+
+/* 睡眠分析 */
+.gradient{width:86%;height:0.5rem;margin-top: 1rem;position: relative;left: 43%;margin-left: -34%;color:#fff;
+border-radius: 0.5rem; -moz-border-radius: 0.5rem;  -webkit-border-radius: 0.5rem;
+background:-webkit-gradient(linear,0% 0%, 100% 0%, from(#99FF00), to(#CC3366), color-stop(0.5,#9966FF));}
+.gradient label{float: left;margin-top: -0.2rem;font-size:0.5rem}
+
+.sleep-analysis{height: 2.5rem;font-size: 0.6rem;text-align: left;}
+.sleep-analysis .col-33 div {color:#999;font-weight: 100;margin-top: 0.5rem;}
+.sleep-analysis .col-33 div i{margin-left: 20%;}
+.sleep-analysis .col-33 div label,.sleep-analysis .col-33 div span{margin-left: 5%;}
+.sleep-analysis .col-33 p{margin:0;margin-left: 25%;}
+.sleep-analysis .col-33:nth-child(1) i,.sleep-analysis .col-33:nth-child(1) label{color: #99FF00}
+.sleep-analysis .col-33:nth-child(2) i,.sleep-analysis .col-33:nth-child(2) label{color: #9966FF}
+.sleep-analysis .col-33:nth-child(3) i,.sleep-analysis .col-33:nth-child(3) label{color: #CC3366}

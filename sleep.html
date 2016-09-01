@@ -63,6 +63,32 @@
                                     <p>10小时00分钟</p>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="gradient">
+                                    <label style="margin-left: 2%">|</label>
+                                    <label style="margin-left: 30%">|</label>
+                                </div>
+                            </div>
+                            <div class="row sleep-analysis">
+                                <div class="col-33">
+                                    <div>
+                                        <i class="fa fa-square"></i><span>清醒</span><label>2%</label>
+                                    </div>
+                                    <p>1小时30分钟</p>
+                                </div>
+                                <div class="col-33">
+                                    <div>
+                                        <i class="fa fa-square"></i><span>浅睡</span><label>30%</label>
+                                    </div>
+                                    <p>3小时00分钟</p>
+                                </div>
+                                <div class="col-33">
+                                    <div>
+                                        <i class="fa fa-square"></i><span>深睡</span><label>68%</label>
+                                    </div>
+                                    <p>7小时00分钟</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="tab2" class="tab">
@@ -96,10 +122,15 @@
 
     // 页面加载完成后执行函数
     $(function(){
+        //补零
+        function add0(num){
+            return num<=9?'0'+num:num;
+        }
         var now = new Date();
         var year = now.getFullYear();       //年
-        var month = now.getMonth() + 1;     //月
-        var day = now.getDate();            //日
+        var month = add0(now.getMonth() + 1);     //月
+        var day = add0(now.getDate());            //日
+        //日期
         $("#day").val(year+'-'+month+'-'+day);
 
         // 初始化echarts实例
@@ -169,16 +200,13 @@
                 name: '销量',
                 type: 'line',
                 smooth:true,
-                data: [80, 57, 42, 30, 22, 16,20, 23, 32, 34, 46, 60,70],//这里的睡眠数值与小时一一对应由后台程序提供，这里只是演示数据；另外说明下由于Y轴上要划分4个区间，所以区间从0到80，数值越小睡眠程度越深。
+                data: [80, 40, 0, 28, 12, 14,10, 12, 15, 30, 36, 40,60],//这里的睡眠数值与小时一一对应由后台程序提供，这里只是演示数据；另外说明下由于Y轴上要划分4个区间，所以区间从0到80，数值越小睡眠程度越深。
                 lineStyle: {
                     normal:{
                         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                            offset: 0, color: '#99FFFF' // 0% 处的颜色
-                        }, {offset: 0.2, color: '#99CCFF' // 20% 处的颜色
-                        }, {offset: 0.4, color: '#9999FF' // 40% 处的颜色
-                        }, {offset: 0.6, color: '#996699' // 60% 处的颜色
-                        }, {offset: 0.8, color: '#993399' // 80% 处的颜色
-                        }, {offset: 1, color: '#000066' // 100% 处的颜色
+                            offset: 0, color: '#99FF00' // 0% 处的颜色
+                        }, {offset: 0.5, color: '#9966FF' // 50% 处的颜色
+                        }, {offset: 1, color: '#CC3366' // 100% 处的颜色
                         }], false)
                     }
                 }
