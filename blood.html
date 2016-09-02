@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="css/sm.css">
     <link rel="stylesheet" href="css/my.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 
 </head>
 <body>
@@ -25,19 +26,17 @@
         </header>
         <div class="content">
             <!-- 这里是页面内容区 -->
-            <div class="content-block-title">页面列表</div>
-            <div class="content-padded">
-                <ul>
-                    <li>
-                        <a href="blood.html">血压</a>
-                    </li>
-                    <li>
-                        <a href="sleep.html">睡眠</a>
-                    </li>
-                    <li>
-                        <a href="run.html">记步</a>
-                    </li>
-                </ul>
+            <div class="row blood">
+                <div class="blood-info">
+                    <div class="xl">心率:<span>74</span></div>
+                    <div class="xy"><span>107</span>/<span>86</span></div>
+                    <div class="time">00:00</div>
+                </div>
+                <div class="date">
+                    <i class="fa fa-caret-left"></i>
+                    <input type="text" data-toggle='date' id="day" value="" />
+                    <i class="fa fa-caret-right max"></i>
+                </div>
             </div>
             <!-- 内容区结束 -->
         </div>
@@ -49,6 +48,26 @@
 <script type='text/javascript' src='js/echarts.min.js' charset='utf-8'></script>
 <script>
     $.init();
+
+    $(function() {
+        //补零
+        function add0(num) {
+            return num <= 9 ? '0' + num : num;
+        }
+
+        var now = new Date();
+        var year = now.getFullYear();       //年
+        var month = add0(now.getMonth() + 1);     //月
+        var day = add0(now.getDate());            //日
+        var hour = add0(now.getHours());       //小时
+        var minute = add0(now.getMinutes());     //分钟
+        //日期
+        $("#day").val(year + '-' + month + '-' + day);
+
+        setInterval(function () {
+            $('.blood-info .time').html(hour+':'+minute);
+        },1000);
+    });
 </script>
 </body>
 </html>

@@ -1,10 +1,10 @@
 /*!
  * =====================================================
  * 自定义样式
- * 覆盖部分MSUI样式
+ * 覆盖MSUI样式
  * 加载在sm.css之后
  *
- * 参考：http://m.sui.taobao.org/components/#tabs
+ * MSUI参考：http://m.sui.taobao.org/components/#tabs
  * =====================================================
  */
 
@@ -35,7 +35,7 @@ div.date i.max{color:#aaa;}
 .gradient{width:86%;height:0.5rem;margin-top: 1rem;position: relative;left: 43%;margin-left: -34%;color:#fff;
 border-radius: 0.5rem; -moz-border-radius: 0.5rem;  -webkit-border-radius: 0.5rem;
 background:-webkit-gradient(linear,0% 0%, 100% 0%, from(#99FF00), to(#CC3366), color-stop(0.5,#9966FF));}
-.gradient label{float: left;margin-top: -0.2rem;font-size:0.6rem}
+.gradient label{float: left;margin-top: -0.25rem;font-size:0.6rem;}
 
 .sleep-analysis{height: 2.5rem;font-size: 0.6rem;text-align: left;}
 .sleep-analysis .col-33 div {color:#999;font-weight: 100;margin-top: 0.5rem;}
@@ -45,3 +45,13 @@ background:-webkit-gradient(linear,0% 0%, 100% 0%, from(#99FF00), to(#CC3366), c
 .sleep-analysis .col-33:nth-child(1) i,.sleep-analysis .col-33:nth-child(1) label{color: #99FF00}
 .sleep-analysis .col-33:nth-child(2) i,.sleep-analysis .col-33:nth-child(2) label{color: #9966FF}
 .sleep-analysis .col-33:nth-child(3) i,.sleep-analysis .col-33:nth-child(3) label{color: #CC3366}
+
+/* 血压 */
+.blood{height:15rem;}
+.blood .date{background: none;}
+.blood-info{margin-top:1rem;position:relative;left:50%;margin-left: -6rem;width:12rem;height:12rem;background: url('../img/blood.png') no-repeat;background-size: 100%;text-align: center;color:#79c34b;}
+.blood-info .xl{position:relative;top: 2.5rem;font-size: 1.2rem;}
+.blood-info .xl span{font-size: 1.8rem;}
+.blood-info .xy{position:relative;top: 2rem;font-size: 2.2rem;}
+.blood-info .xy span:nth-child(2){color: #FF9933}
+.blood-info .time{position:relative;top: 2rem;font-size: 1rem;color: #999}

@@ -48,7 +48,7 @@
                             </div>
                             <div class="row echart-buttom">
                                 <div class="col-33">
-                                    <h3>20052</h3>
+                                    <h3 id="bs">0</h3>
                                     <p>步</p>
                                 </div>
                                 <div class="col-33">
@@ -63,8 +63,7 @@
                             <div class="row echart" style="height: 12rem;">
                                 <div class="col-100">
                                     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
-                                    <div id="main2" style="width: 100%;height:12.9rem;z-index:99"></div>
-                                    <div style="width: 100%;height:1.6rem;margin-top: -2.3rem;background: #fff;"></div>
+                                    <div id="main2" style="width: 100%;height:12rem;"></div>
                                 </div>
                             </div>
                         </div>
@@ -93,10 +92,15 @@
     $.init();
 
     $(function(){
+        //补零
+        function add0(num){
+            return num<=9?'0'+num:num;
+        }
         var now = new Date();
         var year = now.getFullYear();       //年
-        var month = now.getMonth() + 1;     //月
-        var day = now.getDate();            //日
+        var month = add0(now.getMonth() + 1);     //月
+        var day = add0(now.getDate());            //日
+        //日期
         $("#day").val(year+'-'+month+'-'+day);
 
         //仪表盘
@@ -104,9 +108,6 @@
         // 指定图表的配置项和数据
         var option1 = {
             radius:'90%',
-            tooltip : {
-                formatter: "{a} <br/>{b} : {c}%"
-            },
             toolbox: {
                 feature: {
                     restore: {},
@@ -117,22 +118,14 @@
                 {
                     name: '刻度背景',
                     type: 'gauge',
-                    detail: {formatter:'{value}'},
                     data: [{name: '步数'}],
                     min:0,
-                    max:50000,
-                    axisLine:{// 坐标轴线
-                        lineStyle :{
-                            width:10,
-                            opacity:0
-                        }
-                    },
-                    axisLabel:{show:false},// 坐标轴小标记
-                    axisTick:{// 刻度
-                        show:true
-                    },
+                    max:8000,
                     splitLine:{show:false},// 分隔线
                     pointer:{show:false},
+                    detail : {show:false},
+                    axisLabel:{show:false},// 坐标轴小标记
+                    axisTick:{show:true},// 刻度
                     title : {
                         offsetCenter: [0, '-55%'],       // x, y，单位px
                         textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
@@ -140,32 +133,37 @@
                             fontSize:18
                         }
                     },
-                    detail : {show:false}
-                },
-                {
-                    name: '动态数值',
-                    type: 'gauge',
-                    detail: {formatter:'{value}'},
-                    data: [{value: 500,name: '目标50000'}],
-                    min:0,
-                    max:50000,
-                    axisLine:{
+                    axisLine:{// 坐标轴线
                         lineStyle :{
                             width:10,
                             opacity:0
                         }
                     },
-                    splitLine:{show:false},
+                },
+                {
+                    name: '动态数值',
+                    type: 'gauge',
+                    detail: {formatter:'{value}'},
+                    data: [{value: 1000,name: '目标8000'}],
+                    min:0,
+                    max:8000,
+                    endAngle:90,
+                    splitLine:{show:false},// 分隔线
                     axisLabel:{show:false},
-                    axisTick:{
-                        show:true
+                    axisTick:{show:false},
+                    pointer:{width:'0'},//指针
+                    axisLine :{
+                        lineStyle :{
+                            width:8,
+                            opacity:0.5,
+                            color:[[1, '#fff']]
+                        }
                     },
-                    pointer:{show:false},
                     title : {
-                        offsetCenter: [0, '25%'],       // x, y，单位px
+                        offsetCenter: [0, '-10%'],       // x, y，单位px
                         textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
                             color: '#fff',
-                            fontSize:22
+                            fontSize:20
                         }
                     }
                 }
@@ -174,9 +172,15 @@
         // 使用刚指定的配置项和数据显示图表。
 //        myChart1.setOption(option1);
 
-        //每隔1秒值+1，模拟跑步时的实时刷新
+        //每隔1秒值加上yige，模拟跑步时的实时刷新
         setInterval(function () {
-            option1.series[1].data[0].value = option1.series[1].data[0].value+1;
+            var val = option1.series[1].data[0].value+parseInt(Math.random()*50,10);
+            option1.series[1].data[0].value = val;
+            $('#bs').html(val);
+            var max = 8000;
+            var num = 225-270*(val/max);
+            if(val>=max){num = -45;}//步数大于等于最大值时，度数定格在-45°
+            option1.series[1].endAngle = num;
             myChart1.setOption(option1, true);
         },1000);
 
@@ -197,9 +201,9 @@
             grid: {
                 show:true,
                 top:'10%',
-                left: '-4%',
+                left: '-6%',
                 right: '0%',
-                bottom: '40px',
+                bottom: '6%',
                 containLabel: true,
                 borderWidth :0
             },
@@ -220,7 +224,6 @@
                     },
                     axisLabel:{
                         textStyle:{
-                            color:'#333',
                             fontSize:16
                         }
                     }
@@ -229,18 +232,10 @@
             yAxis : [
                 {
                     type:'value',
-                    axisLine:{
-                        show:false
-                    },
-                    axisLabel :{
-                        show:false
-                    },
-                    axisTick:{
-                        show:false
-                    },
-                    splitLine:{
-                        show:false
-                    },
+                    axisLine:{show:false},
+                    axisLabel :{show:false},
+                    axisTick:{show:false},
+                    splitLine:{show:false}
                 }
             ],
             series: [{
