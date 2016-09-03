@@ -18,7 +18,7 @@
 /* 日期 */
 div.date{background: #fff;text-align: center;}
 div.date input{padding:0.3rem;line-height: inherit;background:none;border: 0;width:6rem;text-align: center;color:#aaa;letter-spacing:0.08rem}
-div.date i{color: #79c34b;}
+div.date i{color: #79c34b;margin-left: 1rem;margin-right: 1rem;}
 div.date i.max{color:#aaa;}
 
 /* 图表 */
@@ -55,3 +55,8 @@ background:-webkit-gradient(linear,0% 0%, 100% 0%, from(#99FF00), to(#CC3366), c
 .blood-info .xy{position:relative;top: 2rem;font-size: 2.2rem;}
 .blood-info .xy span:nth-child(2){color: #FF9933}
 .blood-info .time{position:relative;top: 2rem;font-size: 1rem;color: #999}
+
+/* 血压图表 */
+.blood-chart{}
+.blood-chart div.col-100{background: #fff;}
+.blood-chart input{position:relative;left:79%;top:0.5rem;width:3rem;text-align: center;border: 1px #ccc solid;z-index: 9}

@@ -117,21 +117,13 @@
 <script type='text/javascript' src='js/zepto.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/sm.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/echarts.min.js' charset='utf-8'></script>
+<!-- 需要用到日期input时，请引入该文件,里面整理了相关函数 -->
+<script type='text/javascript' src='js/myDateTime.js' charset='utf-8'></script>
 <script>
     $.init();
 
     // 页面加载完成后执行函数
     $(function(){
-        //补零
-        function add0(num){
-            return num<=9?'0'+num:num;
-        }
-        var now = new Date();
-        var year = now.getFullYear();       //年
-        var month = add0(now.getMonth() + 1);     //月
-        var day = add0(now.getDate());            //日
-        //日期
-        $("#day").val(year+'-'+month+'-'+day);
 
         // 初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));

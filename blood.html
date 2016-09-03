@@ -38,6 +38,13 @@
                     <i class="fa fa-caret-right max"></i>
                 </div>
             </div>
+            <div class="row blood-chart">
+                <div class="col-100">
+                    <input type="text" id="year" />
+                    <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
+                    <div id="main" style="width: 100%;height:14rem;margin-top: -1.2rem;"></div>
+                </div>
+            </div>
             <!-- 内容区结束 -->
         </div>
     </div>
@@ -46,6 +53,8 @@
 <script type='text/javascript' src='js/zepto.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/sm.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/echarts.min.js' charset='utf-8'></script>
+<!-- 需要用到日期input时，请引入该文件,里面整理了相关函数 -->
+<script type='text/javascript' src='js/myDateTime.js' charset='utf-8'></script>
 <script>
     $.init();
 
@@ -54,19 +63,138 @@
         function add0(num) {
             return num <= 9 ? '0' + num : num;
         }
-
-        var now = new Date();
-        var year = now.getFullYear();       //年
-        var month = add0(now.getMonth() + 1);     //月
-        var day = add0(now.getDate());            //日
-        var hour = add0(now.getHours());       //小时
-        var minute = add0(now.getMinutes());     //分钟
-        //日期
-        $("#day").val(year + '-' + month + '-' + day);
-
+        //每秒刷新当前时间，精确到分钟
         setInterval(function () {
-            $('.blood-info .time').html(hour+':'+minute);
+            var now = new Date();
+            $('.blood-info .time').html(add0(now.getHours())+':'+add0(now.getMinutes()));
         },1000);
+
+        //加载时赋值年份
+        var now = new Date();
+        var year = now.getFullYear()
+        $("#year").val(year);
+
+        //切换年份
+        $("#year").picker({
+            toolbarTemplate: '<header class="bar bar-nav" style="background: #fff">\
+  <button class="button button-link pull-right close-picker">确定</button>\
+  <h1 class="title">请选择年份</h1>\
+  </header>',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: ['2012', '2013', '2014', '2015', '2016']
+                    //如果你希望显示文案和实际值不同，可以在这里加一个displayValues: [.....]
+                }
+            ]
+        });
+
+        // 初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '血压监测',
+                textStyle:{color:'#999',fontWeight :100,fontSize:14},
+                top:'3%',
+                left:'2%'
+            },
+            tooltip : {
+                trigger: 'axis',
+                formatter:'{a0}:{c0}<br>{a1}:{c1}'
+            },
+            legend: {
+                top:'3%',
+                left: '29%',
+                data:[{name: '收缩压',icon :'circle',textStyle: {color: '#79c34b'}},
+                       {name: '舒张压',icon :'circle',textStyle: {color: '#FF9933'}}]
+            },
+            dataZoom:{
+                type:'inside',
+            },
+            grid: {
+                show:true,
+                top:'15%',
+                left: '3%',
+                right: '5%',
+                bottom: '5%',
+                containLabel: true,
+                backgroundColor:'rgba(255, 255, 255, 0.3)',
+                borderColor:'#eee'
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['01','02', '03','04', '05','06', '07','08'],
+                    axisLine: {
+                        lineStyle: {
+                            color:'#888',
+                            opacity:0.5
+                        }
+                    },
+                    axisTick: {
+                        inside: true,
+                        alignWithLabel: true
+                    },
+                    axisLabel:{
+                        textStyle:{
+                            fontSize:12
+                        }
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    min:0,
+                    max:300,
+                    interval:30,
+                    axisLine: {
+                        lineStyle: {
+                            color:'#888',
+                            opacity:0.5
+                        }
+                    },
+                    axisTick : {show: false},
+                    axisLabel:{
+                        textStyle:{
+                            fontSize:10
+                        }
+                    }
+                }
+            ],
+            series: [{
+                name:'收缩压',
+                type: 'line',
+                lineStyle:{
+                    normal:{
+                        color:'#79c34b'
+                    }
+                },
+                itemStyle:{
+                    normal:{
+                        color:'#79c34b'
+                    }
+                },
+                data: [114, 94, 115, 124, 102, 114,100]
+            },{
+                name:'舒张压',
+                type: 'line',
+                lineStyle:{
+                    normal:{
+                        color:'#FF9933'
+                    }
+                },
+                itemStyle:{
+                    normal:{
+                        color:'#FF9933'
+                    }
+                },
+                data: [121, 114, 118, 128, 122, 134,120]
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
     });
 </script>
 </body>
