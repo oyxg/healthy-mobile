@@ -39,7 +39,7 @@ $(function() {
         //当生成时间>=今天时，右箭头变灰
         if(getTimeStamp(date)>getTimeStamp(toDay)){
             $(this).addClass('max');
-            $.alert('没有明天数据');
+            $.alert('没有明天的数据');
         }else{
             $(this).prevAll('input').val(date);
         }
