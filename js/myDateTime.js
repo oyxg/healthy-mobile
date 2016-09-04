@@ -18,7 +18,7 @@ $(function() {
     $("#day").val(toDay);
 
     //减天数
-    $("i[class*='fa-caret-left']").click(function () {
+    $(".date i[class*='fa-caret-left']").click(function () {
         var day = $(this).next('input').val();//获取当前输入框中的日期
         var timestamp = getTimeStamp(day);
         var date = new Date(parseInt(timestamp)).toISOString().substr(0, 10);//转换为日期
@@ -30,8 +30,8 @@ $(function() {
     });
 
     //加天数
-    $("i[class*='fa-caret-right']").click(function () {
-        var day = $(this).prev('input').val();//获取当前输入框中的日期
+    $(".date i[class*='fa-caret-right']").click(function () {
+        var day = $(this).prevAll('input').val();//获取当前输入框中的日期
         var timestamp = getTimeStamp(day);
         var snum = 3600 * 1000 * 48;//2天的毫秒数
         var nextDay = parseInt(timestamp) + snum;
@@ -41,7 +41,7 @@ $(function() {
             $(this).addClass('max');
             $.alert('没有明天数据');
         }else{
-            $(this).prev('input').val(date);
+            $(this).prevAll('input').val(date);
         }
     });
 

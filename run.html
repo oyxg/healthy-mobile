@@ -38,6 +38,7 @@
                             <div class="date">
                                 <i class="fa fa-caret-left"></i>
                                 <input type="text" data-toggle='date' id="day" value="" />
+                                <i class="fa fa-calendar"></i>
                                 <i class="fa fa-caret-right max"></i>
                             </div>
                             <div class="row echart">
@@ -99,7 +100,6 @@
         var myChart1 = echarts.init(document.getElementById('main1'));
         // 指定图表的配置项和数据
         var option1 = {
-            radius:'90%',
             toolbox: {
                 feature: {
                     restore: {},
@@ -111,6 +111,7 @@
                     name: '刻度背景',
                     type: 'gauge',
                     data: [{name: '步数'}],
+                    radius:'80%',
                     min:0,
                     max:8000,
                     splitLine:{show:false},// 分隔线
@@ -130,16 +131,17 @@
                             width:10,
                             opacity:0
                         }
-                    },
+                    }
                 },
                 {
                     name: '动态数值',
                     type: 'gauge',
                     detail: {formatter:'{value}'},
                     data: [{value: 1000,name: '目标8000'}],
+                    radius:'80%',
                     min:0,
                     max:8000,
-                    endAngle:90,
+                    endAngle:90,//初始角度，后台提供
                     splitLine:{show:false},// 分隔线
                     axisLabel:{show:false},
                     axisTick:{show:false},
@@ -153,9 +155,28 @@
                     },
                     title : {
                         offsetCenter: [0, '-10%'],       // x, y，单位px
-                        textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        textStyle: {
                             color: '#fff',
                             fontSize:20
+                        }
+                    }
+                },
+                {
+                    name: '外圈渐变弧',
+                    type: 'gauge',
+                    radius:'85%',
+                    min:0,
+                    max:8000,
+                    endAngle:90,
+                    splitLine:{show:false},// 分隔线
+                    axisLabel:{show:false},
+                    axisTick:{show:false},
+                    pointer:{width:'0'},//指针
+                    axisLine :{
+                        lineStyle :{
+                            width:2,
+                            opacity:0.8,
+                            color:[[1, '#fff']]
                         }
                     }
                 }
@@ -173,6 +194,7 @@
             var num = 225-270*(val/max);
             if(val>=max){num = -45;}//步数大于等于最大值时，度数定格在-45°
             option1.series[1].endAngle = num;
+            option1.series[2].endAngle = num;
             myChart1.setOption(option1, true);
         },1000);
 

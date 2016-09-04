@@ -35,14 +35,18 @@
                 <div class="date">
                     <i class="fa fa-caret-left"></i>
                     <input type="text" data-toggle='date' id="day" value="" />
+                    <i class="fa fa-calendar"></i>
                     <i class="fa fa-caret-right max"></i>
                 </div>
             </div>
             <div class="row blood-chart">
                 <div class="col-100">
-                    <input type="text" id="year" />
+                    <div class="title">&nbsp;&nbsp;血压监测</div>
                     <!-- 为ECharts准备一个具备大小（宽高）的容器 -->
-                    <div id="main" style="width: 100%;height:14rem;margin-top: -1.2rem;"></div>
+                    <div id="main" style="width: 100%;height:14rem;"></div>
+                    <i class="fa fa-caret-left"></i>
+                    <i class="fa fa-caret-right"></i>
+                    <input type="text" id="year" />
                 </div>
             </div>
             <!-- 内容区结束 -->
@@ -93,19 +97,13 @@
         var myChart = echarts.init(document.getElementById('main'));
         // 指定图表的配置项和数据
         var option = {
-            title: {
-                text: '血压监测',
-                textStyle:{color:'#999',fontWeight :100,fontSize:14},
-                top:'3%',
-                left:'2%'
-            },
             tooltip : {
                 trigger: 'axis',
                 formatter:'{a0}:{c0}<br>{a1}:{c1}'
             },
             legend: {
-                top:'3%',
-                left: '29%',
+                top:'91%',
+                left: '4%',
                 data:[{name: '收缩压',icon :'circle',textStyle: {color: '#79c34b'}},
                        {name: '舒张压',icon :'circle',textStyle: {color: '#FF9933'}}]
             },
@@ -114,18 +112,18 @@
             },
             grid: {
                 show:true,
-                top:'15%',
-                left: '3%',
+                top:'8%',
+                left: '2%',
                 right: '5%',
-                bottom: '5%',
+                bottom: '12%',
                 containLabel: true,
                 backgroundColor:'rgba(255, 255, 255, 0.3)',
-                borderColor:'#eee'
+                borderColor:'#efefef'
             },
             xAxis : [
                 {
                     type : 'category',
-                    data : ['01','02', '03','04', '05','06', '07','08'],
+                    data : [2  , 3  , 4  , 5  , 6  , 7  , 8  , 9],//初始收下标，由后台提供
                     axisLine: {
                         lineStyle: {
                             color:'#888',
@@ -152,11 +150,12 @@
                     axisLine: {
                         lineStyle: {
                             color:'#888',
-                            opacity:0.5
+                            opacity:0
                         }
                     },
                     axisTick : {show: false},
                     axisLabel:{
+                        margin:14,
                         textStyle:{
                             fontSize:10
                         }
@@ -176,7 +175,7 @@
                         color:'#79c34b'
                     }
                 },
-                data: [114, 94, 115, 124, 102, 114,100]
+                data: [114, 125, 114, 122, 134, 120, 122, 134]//初始收缩压数据，由后台提供
             },{
                 name:'舒张压',
                 type: 'line',
@@ -190,11 +189,71 @@
                         color:'#FF9933'
                     }
                 },
-                data: [121, 114, 118, 128, 122, 134,120]
+                data: [94,  96,  108, 102, 114, 100, 109, 121]//初始舒张压数据，由后台提供
             }]
         };
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
+
+
+        //模拟血压数据；这里的数据请通过ajax方式从后台获取，这里只作为模拟数据提供演示
+        var arr = new Array();
+        arr[0] = [12 , 1  , 2  , 3  , 4  , 5  , 6  , 7  , 8  , 9  , 10 , 11];//x轴下标
+        arr[1] = [110, 124, 114, 125, 114, 122, 134, 120, 122, 134, 122, 130];//收缩压
+        arr[2] = [98 , 111, 94,  96,  108, 102, 114, 100, 109, 121, 101, 90];//舒张压
+        //获取下标
+        function indexof(arr ,value) {
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] == value)
+                    return i;
+            }
+        }
+        //循环获取从指定下标开始向后的数据:str=>下标，len=>长度，lr=>向左向右
+        function getData(str , len , lr){
+            var data = new Array();
+            data[0] = new Array();//存放x轴标
+            data[1] = new Array();//存放收缩压
+            data[2] = new Array();//存放舒张压
+            var index = indexof(arr[0] ,str);//获取匹配到的字符下标
+            var max = arr[0].length-8;//最大起始下标
+            var star = 0;//初始化起始下标
+            if(lr=='l'){
+                if(index-1<0)$.alert('没有数据了');
+                star = index-1<=0?0:index-1;
+            }else{
+                if(index+1>max)$.alert('没有数据了');
+                star = index+1>=max?max:index+1;
+            }
+            var end  = star+len;
+//            console.info('star:'+star+'end:'+end);
+            //通过循环存入从指定范围的值
+            for(var i = star; i < end; i++){
+                data[0].push(arr[0][i]);
+                data[1].push(arr[1][i]);
+                data[2].push(arr[2][i]);
+            }
+            return data;
+        }
+        //更新数据
+        function refreshData(dataArr){
+            option.xAxis[0].data=dataArr[0];
+            option.series[0].data=dataArr[1];
+            option.series[1].data=dataArr[2];
+            myChart.setOption(option, true);//更新数据
+        }
+        //左箭头单击事件
+        $(".blood-chart i[class*='fa-caret-left']").click(function(){
+            var str = option.xAxis[0].data[0];//当前起始字符
+            var dataArr = getData(str,8,'l');
+            refreshData(dataArr);//更新数据
+        });
+        //右箭头单击事件
+        $(".blood-chart i[class*='fa-caret-right']").click(function(){
+            var str = option.xAxis[0].data[0];//当前起始字符
+            var dataArr = getData(str,8,'r');
+            refreshData(dataArr);//更新数据
+        });
+
     });
 </script>
 </body>
