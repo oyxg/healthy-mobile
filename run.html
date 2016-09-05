@@ -178,6 +178,22 @@
                             opacity:0.8,
                             color:[[1, '#fff']]
                         }
+                    },
+                    markPoint:{
+                        symbol:'circle',
+                        symbolSize:10,
+                        itemStyle:{
+                            normal:{
+                                color:'#fff'
+                            }
+                        },
+                        data: [
+                            {
+                                name: '某个屏幕坐标',
+                                x: '50%',
+                                y: '50%'
+                            }
+                        ]
                     }
                 }
             ]
@@ -186,6 +202,9 @@
 //        myChart1.setOption(option1);
 
         //每隔1秒值加上yige，模拟跑步时的实时刷新
+        var xz = $('#main2').width() / 2;//圆点坐标x
+        var yz = $('#main2').height() / 2 - 20;//圆点坐标y
+        var r  = $('#main2').height() / 2 * 0.70;//圆半径
         setInterval(function () {
             var val = option1.series[1].data[0].value+parseInt(Math.random()*50,10);
             option1.series[1].data[0].value = val;
@@ -193,8 +212,14 @@
             var max = 8000;
             var num = 225-270*(val/max);
             if(val>=max){num = -45;}//步数大于等于最大值时，度数定格在-45°
+            var x = xz + r * Math.cos(Math.PI * (0-num) / 180);
+            var y = yz + r * Math.sin(Math.PI * (0-num) / 180);
             option1.series[1].endAngle = num;
             option1.series[2].endAngle = num;
+            option1.series[2].markPoint.data[0].x = x;//外圈跟随圆点
+            option1.series[2].markPoint.data[0].y = y;
+//            console.info(r);
+//            console.info('x:'+x+';y:'+y);
             myChart1.setOption(option1, true);
         },1000);
 
