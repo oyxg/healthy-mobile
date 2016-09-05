@@ -206,7 +206,7 @@
         var yz = $('#main2').height() / 2 - 20;//圆点坐标y
         var r  = $('#main2').height() / 2 * 0.70;//圆半径
         setInterval(function () {
-            var val = option1.series[1].data[0].value+parseInt(Math.random()*500,10);
+            var val = option1.series[1].data[0].value+parseInt(Math.random()*50,10);
             option1.series[1].data[0].value = val;
             $('#bs').html(val);
             var max = 8000;
