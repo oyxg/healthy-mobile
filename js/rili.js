@@ -1,18 +1,57 @@
-	$(function(){
-	var jjrmodelidlist;  //用于存放从数据库取出的所有节假日的id
-	var jjrmodeltimelist; //用于存放从数据库取出的所有节假日的time
-	var jjrmodelztlist; //用于存放从数据库取出的所有节假日的状态
-		
-	createSelectYear();  //创建年份下拉,并给对应事件
-	createMonthSelect();  //创建月份下拉，并给对应事件
-	getjjrszModelByYear(withID("aboluo-yearSelect").value); //从数据库取出已经设置了的节假日的数据，例：休息，上班等
-	//根据年，月，用table绘制日历。 年月变动则 重新绘制
-	createTabledate(parseInt(withID("aboluo-yearSelect").value),parseInt(withID("aboluo-selectmonth").value));
-	//上月下月的a标签给事件
-	leftrightclick();
-	//设置右边显示栏显示内容，显示栏还可以设置节假日的状态等
-	setRigth(new Date().getFullYear(),new Date().getMonth()+1,new Date().getDate());
-	});
++ function($) {
+	"use strict";
+
+	var today = new Date();
+
+	var formatNumber = function (n) {
+		return n < 10 ? "0" + n : n;
+	};
+
+	var initMonthes = ('01 02 03 04 05 06 07 08 09 10 11 12').split(' ');
+
+	var initYears = (function () {
+		var arr = [];
+		for (var i = 1950; i <= 2030; i++) { arr.push(i); }
+		return arr;
+	})();
+
+	var defaults = {
+
+		rotateEffect: false,  //为了性能
+
+		value: [today.getFullYear(), formatNumber(today.getMonth()+1)],
+
+		onChange: function (picker, values, displayValues) {
+			createTabledate(picker.cols[0].value,picker.cols[1].value);
+		},
+
+		formatValue: function (p, values, displayValues) {
+			return displayValues[0] + '-' + values[1];
+		},
+
+		cols: [
+			// Years
+			{
+				values: initYears
+			},
+			// Months
+			{
+				values: initMonthes
+			}
+		]
+	};
+
+	$.fn.datePicker = function(params) {
+		return this.each(function() {
+			if(!this) return;
+			var p = $.extend(defaults, params);
+			$(this).picker(p);
+			if (params.value) $(this).val(p.formatValue(p, p.value, p.value));
+		});
+	};
+
+}(Zepto);
+
 
 //阻止冒泡
 function stopBubble(e){
@@ -29,7 +68,7 @@ function createSelectYear(){
 	var Nowtime=new Date();
 	var currYear=Nowtime.getFullYear();
 	for(var i=0;i<=79;i++){
-		yearSelect.options.add(new Option((i+1970)+"年",i+1970));
+		yearSelect.options.add(new Option((i+1970),i+1970));
 		if(currYear==i+1970){
 		yearSelect.options[i].selected=true;
 		}
@@ -38,55 +77,9 @@ function createSelectYear(){
 		var aclick=withClass("aboluo-aclick");
 		//重新赋值给变全局变量,所有的带状态的日期;然后下一步将创建table,完成动态样式,
 		//这里要重读数据就5个位置,选择年时,上一个月,下一个月,设置节假日button,返回今天button
-		getjjrszModelByYear(withID("aboluo-yearSelect").value);
 		createTabledate(withID("aboluo-yearSelect").value,withID("aboluo-selectmonth").value);
-		if(aclick==""){
-			//说明没选,或选的当天,算出选的这个月有多少天,与原来的那个月的天数一对比,如果原来的天数大于现在的天数,那么对换
-			//这里先算当前月当前天,然后算出选择的那个月总天数,然后对比,如果当前天大于选择的那个月那天,对换
-		 var pervdays1=getCurrMonthLashDay(withID("aboluo-yearSelect").value,withID("aboluo-selectmonth").value);
-		    	if(new Date().getDate()>pervdays1){
-					setRigth(withID("aboluo-yearSelect").value,withID("aboluo-selectmonth").value,pervdays1);	
-				}else{
-					setRigth(withID("aboluo-yearSelect").value,withID("aboluo-selectmonth").value,new Date().getDate());
-				}
-		}else{
-			var adate=aclick.getAttribute("date");
-			var aarr=adate.split("-");
-			aarr[0]=parseInt(aarr[0]);
-			aarr[1]=parseInt(aarr[1]);
-			aarr[2]=parseInt(aarr[2]);
-			var pervdays=getCurrMonthLashDay(withID("aboluo-yearSelect").value,withID("aboluo-selectmonth").value);
-			if(aarr[2]>pervdays){
-				aarr[2]=pervdays;
-			}
-				setRigth(withID("aboluo-yearSelect").value,withID("aboluo-selectmonth").value,aarr[2]);	
-		}
-		
 	};
 }
-
-function getjjrszModelByYear(year){
-	jjrmodelidlist=['1','2'];
-	jjrmodeltimelist=['2015-08-30 00:00:00','2015-08-31 00:00:00']; //这里时间的格式为yyyy-MM-dd HH:mm:ss
-	jjrmodelztlist=['1','2'];  //1为上班，2为休息
-//	$.ajax({
-//		type:"POST",
-//		url:,
-//		async:false,
-//		data:{"year":year},
-//		success:function(json){
-//			if(json.code>0){
-//				var data=json.data;
-//				for(var i=0;i<data.length;i++){
-//					jjrmodelidlist.push(data[i].jjr_id);
-//					jjrmodeltimelist.push(data[i].jjr_time);
-//					jjrmodelztlist.push(data[i].jjr_zt);
-//				}
-//			}
-//		}
-//	});
-}
-
 
 //创建月的下拉框，并赋值,且添加事件，选择则对应的table日期也将改变,且已选中日期会跳到当前选择月的日期，然后给右边明细栏赋值
 function createMonthSelect(){
@@ -96,35 +89,11 @@ function createMonthSelect(){
 	selectmonth.onchange=function(e){
 		var aclick=withClass("aboluo-aclick");
 		createTabledate(withID("aboluo-yearSelect").value,selectmonth.options[selectmonth.selectedIndex].value);
-		if(aclick==""){
-			//说明没选,或选的当天,算出选的这个月有多少天,与原来的那个月的天数一对比,如果原来的天数大于现在的天数,那么对换
-			//这里先算当前月当前天,然后算出选择的那个月总天数,然后对比,如果当前天大于选择的那个月那天,对换
-		 var pervdays1=getCurrMonthLashDay(withID("aboluo-yearSelect").value,selectmonth.options[selectmonth.selectedIndex].value);
-		    	if(new Date().getDate()>pervdays1){
-					setRigth(withID("aboluo-yearSelect").value,selectmonth.options[selectmonth.selectedIndex].value,pervdays1);	
-				}else{
-					setRigth(withID("aboluo-yearSelect").value,selectmonth.options[selectmonth.selectedIndex].value,new Date().getDate());
-				}
-		}else{
-			var adate=aclick.getAttribute("date");
-			var aarr=adate.split("-");
-			aarr[0]=parseInt(aarr[0]);
-			aarr[1]=parseInt(aarr[1]);
-			aarr[2]=parseInt(aarr[2]);
-			var pervdays=getCurrMonthLashDay(withID("aboluo-yearSelect").value,selectmonth.options[selectmonth.selectedIndex].value);
-			if(aarr[2]>pervdays){
-				aarr[2]=pervdays;
-			}
-				setRigth(withID("aboluo-yearSelect").value,selectmonth.options[selectmonth.selectedIndex].value,aarr[2]);	
-		}
-	
-	
-	
 	};
 	var Nowtime=new Date();
 	var currMonth=Nowtime.getMonth();
     for(var i=0;i<12;i++){
-		selectmonth.options.add(new Option((i+1)+"月",i+1));
+		selectmonth.options.add(new Option((i+1),i+1));
 		if(currMonth==i){
 			selectmonth.options[i].selected=true;
 		}
@@ -288,9 +257,9 @@ function setRigth(year,yue,day){
 	yue=yue.toString();
 	day=day.toString();
 	//设置rigthdiv的marginleft;
-	var rigthdiv=withClass("aboluo-rightdiv");
+	//var rigthdiv=withClass("aboluo-rightdiv");
 	var w=withClass("aboluo-w-700");
-	rigthdiv.style.marginLeft=(w.offsetWidth*0.7+4)+"px";  //设置margin-left
+	//rigthdiv.style.marginLeft=(w.offsetWidth*0.7+4)+"px";  //设置margin-left
 	//给p中添加span显示值
 	var span=newElement('span');
 	var date=setdateinfo(year,yue,day);
@@ -298,34 +267,34 @@ function setRigth(year,yue,day){
 	var span1=newElement('span');
 	var week=getWeek(date.getDay());
 	span1.innerHTML=week;
-	var aboluoxssj=withClass("aboluo-xssj");
-	aboluoxssj.appendChild(span);
-	aboluoxssj.appendChild(span1);
-	var currday=withClass("aboluo-currday");
-	currday.innerHTML=day;
-	currday.style.lineHeight=currday.offsetHeight+"px";    //实际在得到长宽时不能用style.height，得用.offsetHeight,但是设置的时候要用style.height=...
-	var szrq=withClass("aboluo-ssjjr");
-	szrq.style.marginTop="20px";
-	var span2=newElement('span');
-	span2.innerHTML="设置日志状态:";
-	szrq.appendChild(span2);
-	var szrqselect=newElement("select");
-	szrqselect.style.width=(withClass("aboluo-rightdiv").offsetWidth*0.9)+"px";
-	szrqselect.options.add(new Option("无","0")); //0代表还原
-	//这里要判断一下如果是星期67就只能设置上班,如果是星期1-5就只能设置休息
-	var bool=isweekend(year,yue,day);
-	if(bool){
-	szrqselect.options.add(new Option("上班","1"));
-	}else{
-	szrqselect.options.add(new Option("休息","2"));
-	}
-	szrq.appendChild(szrqselect);
-	var szrqbutton=newElement('input');
-	szrqbutton.type="button";
-	szrqbutton.className="btn";  //设置class
-	szrqbutton.value="确认";
-	szrqbutton.setAttribute("onclick","javascript:aboluoSetrq();");
-	szrq.appendChild(szrqbutton);
+	//var aboluoxssj=withClass("aboluo-xssj");
+	//aboluoxssj.appendChild(span);
+	//aboluoxssj.appendChild(span1);
+	//var currday=withClass("aboluo-currday");
+	//currday.innerHTML=day;
+	//currday.style.lineHeight=currday.offsetHeight+"px";    //实际在得到长宽时不能用style.height，得用.offsetHeight,但是设置的时候要用style.height=...
+	//var szrq=withClass("aboluo-ssjjr");
+	//szrq.style.marginTop="20px";
+	//var span2=newElement('span');
+	//span2.innerHTML="设置日志状态:";
+	//szrq.appendChild(span2);
+	//var szrqselect=newElement("select");
+	//szrqselect.style.width=(withClass("aboluo-rightdiv").offsetWidth*0.9)+"px";
+	//szrqselect.options.add(new Option("无","0")); //0代表还原
+	////这里要判断一下如果是星期67就只能设置上班,如果是星期1-5就只能设置休息
+	//var bool=isweekend(year,yue,day);
+	//if(bool){
+	//szrqselect.options.add(new Option("上班","1"));
+	//}else{
+	//szrqselect.options.add(new Option("休息","2"));
+	//}
+	//szrq.appendChild(szrqselect);
+	//var szrqbutton=newElement('input');
+	//szrqbutton.type="button";
+	//szrqbutton.className="btn";  //设置class
+	//szrqbutton.value="确认";
+	//szrqbutton.setAttribute("onclick","javascript:aboluoSetrq();");
+	//szrq.appendChild(szrqbutton);
 	setaclass(year,yue,day);
 }
 
@@ -357,30 +326,30 @@ function setA(){
 			}else{
 			arr[i].setAttribute("onclick","javascript:setRigth("+datearr[0]+","+datearr[1]+","+datearr[2]+");javascript:stopBubble(this);");
 			}
-		for(var n=0;n<jjrmodelidlist.length;n++){
-			if(formatByDate(jjrmodeltimelist[n])==formatByDate(date)){
-				if(jjrmodelztlist[n]==1){ //1上班
-					var span=newElement('span');
-					span.setAttribute("class","aboluo-td-a-ban");
-					arr[i].style.background="#f5f5f5";
-					arr[i].setAttribute("ztid",jjrmodelidlist[n]);
-					arr[i].setAttribute("jjrzt",jjrmodelztlist[n]);
-					span.innerHTML="班";
-					arr[i].appendChild(span);
-				}else if(jjrmodelztlist[n]==2){ //2休息
-					var span=newElement('span');
-					span.setAttribute("class","aboluo-td-a-xiu");
-					arr[i].setAttribute("ztid",jjrmodelidlist[n]);
-					arr[i].setAttribute("jjrzt",jjrmodelztlist[n]);
-					arr[i].style.background="#fff0f0";
-					span.innerHTML="休";
-					arr[i].appendChild(span);
-				}else if(jjrmodelztlist[n]==0){ // 这里为了保证操作过的节假日的唯一性,不给样式只设置a的ztid
-					arr[i].setAttribute("ztid",jjrmodelidlist[n]);
-					arr[i].setAttribute("jjrzt",jjrmodelztlist[n]);
-				}
-			}
-		}	
+		//for(var n=0;n<jjrmodelidlist.length;n++){
+		//	if(formatByDate(jjrmodeltimelist[n])==formatByDate(date)){
+		//		if(jjrmodelztlist[n]==1){ //1上班
+		//			var span=newElement('span');
+		//			span.setAttribute("class","aboluo-td-a-ban");
+		//			arr[i].style.background="#f5f5f5";
+		//			arr[i].setAttribute("ztid",jjrmodelidlist[n]);
+		//			arr[i].setAttribute("jjrzt",jjrmodelztlist[n]);
+		//			span.innerHTML="班";
+		//			arr[i].appendChild(span);
+		//		}else if(jjrmodelztlist[n]==2){ //2休息
+		//			var span=newElement('span');
+		//			span.setAttribute("class","aboluo-td-a-xiu");
+		//			arr[i].setAttribute("ztid",jjrmodelidlist[n]);
+		//			arr[i].setAttribute("jjrzt",jjrmodelztlist[n]);
+		//			arr[i].style.background="#fff0f0";
+		//			span.innerHTML="休";
+		//			arr[i].appendChild(span);
+		//		}else if(jjrmodelztlist[n]==0){ // 这里为了保证操作过的节假日的唯一性,不给样式只设置a的ztid
+		//			arr[i].setAttribute("ztid",jjrmodelidlist[n]);
+		//			arr[i].setAttribute("jjrzt",jjrmodelztlist[n]);
+		//		}
+		//	}
+		//}
 	}
 }
 

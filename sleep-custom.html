@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/my.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="css/week.css">
+    <link rel="stylesheet" href="css/rili.css">
 
 </head>
 <body>
@@ -30,7 +30,7 @@
             <!-- 这里是页面内容区 -->
             <div class="date">
                 <i class="fa fa-caret-left"></i>
-                <input type="text" data-toggle='date' id="day" value="" />
+                <input type="text" id="month" value="" />
                 <i class="fa fa-calendar"></i>
                 <i class="fa fa-caret-right max"></i>
             </div>
@@ -48,13 +48,6 @@
             -->
             <div class="aboluo">
                 <div class="aboluo-leftdiv">
-                    <div class="aboluo-tools">
-                        <div class="aboluo-calendar-select-year"></div>
-                        <div class="aboluo-calendar-month">
-                            <a class="aboluo-month-a-perv" href="javascript:;">&lt; </a>
-                            <a class="aboluo-month-a-next" href="javascript:;"> &gt;</a>
-                        </div>
-                    </div>
                     <div class="aboluo-rilidiv">
                         <table class="aboluo-rilitable" cellspacing="0" cellpadding="0" >
                             <thead class="aboluo-rilithead">
@@ -71,12 +64,6 @@
                         </table>
                     </div>
                 </div>
-                <!--<div class="aboluo-rightdiv">-->
-                    <!--<p class="aboluo-xssj"><p>-->
-                    <!--<p class="aboluo-currday"></p>-->
-                    <!--<p class="aboluo-ssjjr"></p>-->
-                    <!--<p class="aboluo-xsmx"></p>-->
-                <!--</div>-->
             </div>
 
             <!-- 内容区结束 -->
@@ -87,15 +74,53 @@
 
 <script type='text/javascript' src='js/zepto.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/sm.js' charset='utf-8'></script>
-<script type='text/javascript' src='js/week.js' charset='utf-8'></script>
-<!-- 需要用到日期input时，请引入该文件,里面整理了相关函数 -->
-<script type='text/javascript' src='js/myDateTime.js' charset='utf-8'></script>
+<!-- 需要用到日历时，请引入该文件,里面整理了相关函数 -->
+<script type='text/javascript' src='js/rili.js' charset='utf-8'></script>
 <script>
     $.init();
 
     // 页面加载完成后执行函数
     $(function(){
+        var Nowtime=new Date();
+        var currYear=Nowtime.getFullYear();//今年
+        var currMonth=Nowtime.getMonth()+1;//当前月份
+        //根据年，月，用table绘制日历。
+        createTabledate(currYear,currMonth);
 
+
+        //初始化当前年月
+        $("#month").datePicker({
+            value: [currYear, currMonth]
+        });
+
+        //初始化年月选项
+        var yearArr = [];
+        var monthArr = [];
+        for(var i=0;i<=79;i++){
+            yearArr.push(i+1970);
+            if(currYear==i+1970){
+                break;//最大年份为今年
+            }
+        }
+        for(var i=0;i<12;i++){
+            monthArr.push(i+1);
+        }
+        $("#month").picker({
+            toolbarTemplate: '<header class="bar bar-nav">\
+  <button class="button button-link pull-right close-picker">确定</button>\
+  <h1 class="title">年月切换</h1>\
+  </header>',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: yearArr
+                },
+                {
+                    textAlign: 'center',
+                    values: monthArr
+                }
+            ]
+        });
 
     })
 </script>

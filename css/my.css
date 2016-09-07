@@ -8,7 +8,7 @@
  * =====================================================
  */
 
-.bar{background-color: #79c34b;}
+.page .bar{background-color: #79c34b;}
 .bar a,.bar a span{color:#fff;}
 .title {color:#fff;}
 .buttons-tab .button.active { color: #000; border-color: #79c34b;  }
