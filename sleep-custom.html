@@ -15,6 +15,9 @@
 
     <link rel="stylesheet" href="css/rili.css">
 
+    <link type="text/css" rel="stylesheet" href="css/xx/application.css">
+
+
 </head>
 <body>
 <div class="page-group">
@@ -65,7 +68,24 @@
                     </div>
                 </div>
             </div>
-
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <label>您今天睡眠时间</label>
+                        <input value="22|06" />—
+                        <input value="07|06" />
+                        <lable>9.0小时</lable>
+                    </li>
+                </ul>
+            </div>
+            <div class="list-block">
+                <ul>
+                    <li>
+                        <label>您的睡眠质量</label>
+                        <span id="star"></span>
+                    </li>
+                </ul>
+            </div>
             <!-- 内容区结束 -->
         </div>
     </div>
@@ -73,17 +93,26 @@
 
 
 <script type='text/javascript' src='js/zepto.js' charset='utf-8'></script>
+<script type='text/javascript' src='js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/sm.js' charset='utf-8'></script>
 <!-- 需要用到日历时，请引入该文件,里面整理了相关函数 -->
 <script type='text/javascript' src='js/rili.js' charset='utf-8'></script>
+<script type="text/javascript" src="js/jquery.raty.min.js"></script>
 <script>
     $.init();
 
     // 页面加载完成后执行函数
     $(function(){
+        $('#star').raty({ score: 3.26 });
+
+        //补零
+        function add0(num) {
+            return num <= 9 ? '0' + num : num;
+        }
+
         var Nowtime=new Date();
-        var currYear=Nowtime.getFullYear();//今年
-        var currMonth=Nowtime.getMonth()+1;//当前月份
+        var currYear=add0(Nowtime.getFullYear());//今年
+        var currMonth=add0(Nowtime.getMonth()+1);//当前月份
         //根据年，月，用table绘制日历。
         createTabledate(currYear,currMonth);
 
@@ -121,7 +150,53 @@
                 }
             ]
         });
+        //切换到上个月（左箭头）
+        $('i[class*="fa-caret-left"]').click(function(){
+            var ym = $(this).nextAll('input').val();
+            var y = parseInt(ym.substr(0,4));
+            var m = parseInt(ym.substr(5,2))-1;
+            y = add0(new Date(y,m,0).getFullYear());
+            m = add0(new Date(y,m,0).getMonth()+1);
+            if(y<=currYear && m<=currMonth){
+                $(this).nextAll('i[class*="right"]').removeClass('max');
+            }
+            $(this).nextAll('input').datePicker({
+                value: [y, m]
+            });
+            createTabledate(y,m);
+        });
 
+        //切换到下个月（右箭头）
+        $('i[class*="fa-caret-right"]').click(function(){
+            var ym = $(this).prevAll('input').val();
+            var y = parseInt(ym.substr(0,4));
+            var m = parseInt(ym.substr(5,2))+1;
+            y = add0(new Date(y,m,0).getFullYear());
+            m = add0(new Date(y,m,0).getMonth()+1);
+            console.info(currYear+'-'+currMonth);
+            if((y==currYear||y>currYear) && m>currMonth){
+                $(this).addClass('max');
+                $.alert('没有下个月的数据');
+            }else{
+                $(this).prevAll('input').datePicker({
+                    value: [y, m]
+                });
+                createTabledate(y,m);
+            }
+        });
+
+        //
+        var obj = {'2016-9-9':'11.5','2016-9-8':'10.5'};
+        $('td a').each(function(){
+            for(var key in obj){
+                if(new Date(key).getTime()== new Date($(this).attr('date')).getTime()){
+                    var html = '<p>'+$(this).html()+'</p>';
+                    html += '<p>'+obj[key]+'</p>';
+                    $(this).html(html);
+                    console.info(html);
+                }
+            }
+        });
     })
 </script>
 </body>
