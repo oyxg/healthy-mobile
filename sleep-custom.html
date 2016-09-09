@@ -68,9 +68,9 @@
                 <ul>
                     <li>
                         <label>您今天睡眠时间</label>
-                        <input value="22 | 06" readonly />—
-                        <input value="07 | 06" readonly />
-                        <lable>9.0小时</lable>
+                        <input id="inSleep" value="" readonly />—
+                        <input id="outSleep" value="" readonly />
+                        <lable></lable>
                     </li>
                 </ul>
             </div>
@@ -126,8 +126,6 @@
         var currMonth=add0(Nowtime.getMonth()+1);//当前月份
         //根据年，月，用table绘制日历。
         createTabledate(currYear,currMonth);
-        //设置日历中每天的睡眠时长
-        setSleepTimeByDay();
 
 
         //初始化当前年月
@@ -177,7 +175,6 @@
                 value: [y, m]
             });
             createTabledate(y,m);
-            setSleepTimeByDay();
         });
 
         //切换到下个月（右箭头）
@@ -195,27 +192,31 @@
                     value: [y, m]
                 });
                 createTabledate(y,m);
-                setSleepTimeByDay();
             }
         });
 
+        
+        var inSleep = '2016-9-8 21:00:00';//入睡时间
+        var outSleep = '2016-9-9 8:30:00';//清醒时间
 
-        //遍历每天并通过匹配日期赋值
-        function setSleepTimeByDay(){
-            //模拟每日睡眠时长数据
-            var obj = {'2016-9-9':'11.5','2016-9-8':'10.5'};
-            $('td a').each(function(){
-                for(var key in obj){
-                    if(new Date(key).getTime()== new Date($(this).attr('date')).getTime()){
-                        var html = '<p>'+$(this).html()+'</p>';//天
-                        html += '<p>'+obj[key]+'</p>';//睡眠时长
-                        $(this).html(html);
-                    }
-                }
-            });
-        }
+        var inH = add0(new Date(inSleep).getHours());//入睡小时
+        var inM = add0(new Date(inSleep).getMinutes());//入睡分钟
+        var outH = add0(new Date(outSleep).getHours());//清醒小时
+        var outM = add0(new Date(outSleep).getMinutes());//清醒分钟
+        $('#inSleep').val(inH+' | '+inM);//入睡时间赋值
+        $('#outSleep').val(outH+' | '+outM);//清醒时间赋值
 
-    })
+        //计算睡眠时长
+        var inSleepS = new Date(inSleep).getTime();
+        var outSleepS = new Date(outSleep).getTime();
+        var sleepTimeS = (outSleepS-inSleepS)/1000;//睡眠时长（单位：秒）
+        var h = add0(Math.floor(sleepTimeS/3600));
+        var i = Math.floor(Math.floor(sleepTimeS%3600/60)/60*10);
+        $('#outSleep').next('lable').html(h+'.'+i+'小时');//睡眠时长赋值
+
+    });
+
+
 </script>
 </body>
 </html>

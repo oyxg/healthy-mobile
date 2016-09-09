@@ -40,7 +40,7 @@
 			}
 		]
 	};
-
+	//月份变更事件
 	$.fn.datePicker = function(params) {
 		return this.each(function() {
 			if(!this) return;
@@ -151,9 +151,23 @@ function createTabledate(year,yue){
 	}
 	setHolidayred();//设置星期六星期天的样式
 	setA(); //设置td中a的事件
+	setSleepTimeByDay();//设置日历中每天的睡眠时长
 }
 
-
+//遍历每天并通过匹配日期赋值
+function setSleepTimeByDay(){
+	//模拟每日睡眠时长数据
+	var obj = {'2016-9-9':'11.5','2016-9-8':'10.5'};//这里的数据由后台低通，这里只作为演示
+	$('td a').each(function(){
+		for(var key in obj){
+			if(new Date(key).getTime()== new Date($(this).attr('date')).getTime()){
+				var html = '<p>'+$(this).html()+'</p>';//天
+				html += '<p>'+obj[key]+'</p>';//睡眠时长
+				$(this).html(html);
+			}
+		}
+	});
+}
 
 //给上一个月最后几天点击跳转月份
 function pervA(year,yue,day){
