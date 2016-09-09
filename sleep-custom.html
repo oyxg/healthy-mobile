@@ -79,20 +79,21 @@
                     <li>
                         <label>您的睡眠质量</label>
                         <fieldset class="starability-basic">
+                            <!---使用方法：要亮几颗星就在第几颗上加checked；另外：如果不想给让用户改变星星数量 下面的每个input 加上 disabled-->
                             <input type="radio" id="rate1" name="rating" value="5" />
-                            <label for="rate1" title="Terrible">1 star</label>
+                            <label for="rate1" title="">1 star</label>
 
-                            <input type="radio" id="rate2" name="rating" value="4" checked="checked" />
-                            <label for="rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="rate2" name="rating" value="4" checked="checked"  />
+                            <label for="rate2" title="">2 stars</label>
 
                             <input type="radio" id="rate3" name="rating" value="3" />
-                            <label for="rate3" title="Average">3 stars</label>
+                            <label for="rate3" title="">3 stars</label>
 
                             <input type="radio" id="rate4" name="rating" value="2" />
-                            <label for="rate4" title="Very good">4 stars</label>
+                            <label for="rate4" title="">4 stars</label>
 
                             <input type="radio" id="rate5" name="rating" value="1" />
-                            <label for="rate5" title="Amazing">5 stars</label>
+                            <label for="rate5" title="">5 stars</label>
                         </fieldset>
 
                     </li>
@@ -125,6 +126,8 @@
         var currMonth=add0(Nowtime.getMonth()+1);//当前月份
         //根据年，月，用table绘制日历。
         createTabledate(currYear,currMonth);
+        //设置日历中每天的睡眠时长
+        setSleepTimeByDay();
 
 
         //初始化当前年月
@@ -174,6 +177,7 @@
                 value: [y, m]
             });
             createTabledate(y,m);
+            setSleepTimeByDay();
         });
 
         //切换到下个月（右箭头）
@@ -191,20 +195,25 @@
                     value: [y, m]
                 });
                 createTabledate(y,m);
+                setSleepTimeByDay();
             }
         });
 
-        //
-        var obj = {'2016-9-9':'11.5','2016-9-8':'10.5'};
-        $('td a').each(function(){
-            for(var key in obj){
-                if(new Date(key).getTime()== new Date($(this).attr('date')).getTime()){
-                    var html = '<p>'+$(this).html()+'</p>';
-                    html += '<p>'+obj[key]+'</p>';
-                    $(this).html(html);
+
+        //遍历每天并通过匹配日期赋值
+        function setSleepTimeByDay(){
+            //模拟每日睡眠时长数据
+            var obj = {'2016-9-9':'11.5','2016-9-8':'10.5'};
+            $('td a').each(function(){
+                for(var key in obj){
+                    if(new Date(key).getTime()== new Date($(this).attr('date')).getTime()){
+                        var html = '<p>'+$(this).html()+'</p>';//天
+                        html += '<p>'+obj[key]+'</p>';//睡眠时长
+                        $(this).html(html);
+                    }
                 }
-            }
-        });
+            });
+        }
 
     })
 </script>
