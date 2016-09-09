@@ -209,7 +209,7 @@ function setHolidayred(){
 			}
 			if(j>=rows[i].cells.length-2 ){
 				if(cell.getAttribute("class")!="aboluo-nextMonthDays" && cell.getAttribute("class")!="aboluo-pervMonthDays"){
-					a.style.color="red";
+					a.style.color="#000";
 				}
 			}
 		}

@@ -14,13 +14,14 @@ a{cursor:pointer;text-decoration:none;}
 .aboluo-rilitable{width:100%;text-align:center;hegiht:100%;padding-top:5px;}
 .aboluo-rilitable .aboluo-rilithead{height:3rem;background:#79c34b;}
 .aboluo-rilidiv .aboluo-rilitable tr{width:100%;height:2.5rem;}
-.aboluo-rilidiv .aboluo-rilitable tr th{width:14.2%;font-size:0.8rem;}
-.aboluo-rilidiv .aboluo-rilitable tr td{width:14.2%;font-size:1rem;color:#000000;}
+.aboluo-rilidiv .aboluo-rilitable tr th{width:14.2%;font-size:0.7rem;color:#fff;font-weight: 100;}
+.aboluo-rilidiv .aboluo-rilitable tr td{width:14.2%;font-size:1rem;color:#fff;}
 .aboluo-rilidiv .aboluo-rilitable tr .aboluo-currToday{background:#79c34b;color:#FFFFFF;border:3px solid #79c34b;}
 .aboluo-rilidiv .aboluo-rilitable tr .aboluo-currToday p:nth-child(2){color:#fff;}
 .aboluo-rilidiv .aboluo-rilitable tr .aboluo-tdcurrToday{background:#79c34b;color:#FFFFFF;}
 .aboluo-rilidiv .aboluo-rilitable tr td a{font-size:0.7rem;color:#000000;display:block;margin:auto;position:relative;line-height: 2.5rem;border:3px solid #fff;text-align: center;}
 .aboluo-rilidiv .aboluo-rilitable tr td a p{font-size:0.7rem;color:#000000;position:relative;line-height: 0.5rem;}
+.aboluo-rilidiv .aboluo-rilitable tr td a.aboluo-currToday p:nth-child(1){color:#fff;}
 .aboluo-rilidiv .aboluo-rilitable tr td a p:nth-child(2){font-size: 0.5rem;color:#79c34b;line-height: 0.1rem;}
 .aboluo-rilidiv .aboluo-rilitable .aboluo-td-a-ban{font-size:13px;position:absolute;text-align:left;line-height:14px;text-indent:1px;width:15px;display:block;background:#969799;height:15px;color:#fff;overflow:hidden;top:0px;left:0px;}
 .aboluo-rilidiv .aboluo-rilitable .aboluo-td-a-xiu{font-size:13px;position:absolute;text-align:left;line-height:14px;text-indent:1px;width:15px;display:block;background:#f43;height:15px;color:#fff;overflow:hidden;top:0px;left:0px;}
