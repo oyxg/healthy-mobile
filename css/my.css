@@ -15,10 +15,10 @@
 
 .content-block {margin:0;padding:0;}
 
-.list-block {margin: 1rem 0;}
+.list-block {margin: 1rem 0;font-size: 0.65rem;}
 .list-block ul li{height: 2rem;line-height: 2rem;}
-.list-block ul li label{margin-left: 0.8rem;margin-right: 0rem;}
-.list-block ul li input{width:3rem;text-align: center;background: #ccc;border: none;border-radius:0.2rem;color:#999;line-height: 1.2rem;}
+.list-block ul li > label{margin-left: 0.7rem;margin-right: 0rem;float: left;}
+.list-block ul li input{width:3rem;text-align: center;background: #ccc;border: none;border-radius:0.2rem;color:#666;line-height: 1.2rem;margin-left: 0.2rem;margin-right: 0.2rem;}
 
 /* 日期 */
 div.date{background: #fff;text-align: center;}

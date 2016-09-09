@@ -14,9 +14,7 @@
     <link rel="stylesheet" href="css/font-awesome.min.css">
 
     <link rel="stylesheet" href="css/rili.css">
-
-    <link type="text/css" rel="stylesheet" href="css/xx/application.css">
-
+    <link rel="stylesheet" href="css/starability-all.min.css">
 
 </head>
 <body>
@@ -39,8 +37,6 @@
             </div>
             <!--
             //用table 模拟出日期的效果
-            //格式
-            //      xxxx年xx月xx日  (选择的日期,默认为当天)  日期要有5-6排，连接上月下月。当选择上下月中的日期时，跳到上月或下月中
             //星期一,星期二,星期三,星期四,星期五,星期六,星期七
             //day1  day2 day3 day4  day5  day6  day7
             //day1  day2 day3 day4  day5  day6  day7
@@ -72,8 +68,8 @@
                 <ul>
                     <li>
                         <label>您今天睡眠时间</label>
-                        <input value="22|06" />—
-                        <input value="07|06" />
+                        <input value="22 | 06" readonly />—
+                        <input value="07 | 06" readonly />
                         <lable>9.0小时</lable>
                     </li>
                 </ul>
@@ -82,7 +78,23 @@
                 <ul>
                     <li>
                         <label>您的睡眠质量</label>
-                        <span id="star"></span>
+                        <fieldset class="starability-basic">
+                            <input type="radio" id="rate1" name="rating" value="5" />
+                            <label for="rate1" title="Terrible">1 star</label>
+
+                            <input type="radio" id="rate2" name="rating" value="4" checked="checked" />
+                            <label for="rate2" title="Not good">2 stars</label>
+
+                            <input type="radio" id="rate3" name="rating" value="3" />
+                            <label for="rate3" title="Average">3 stars</label>
+
+                            <input type="radio" id="rate4" name="rating" value="2" />
+                            <label for="rate4" title="Very good">4 stars</label>
+
+                            <input type="radio" id="rate5" name="rating" value="1" />
+                            <label for="rate5" title="Amazing">5 stars</label>
+                        </fieldset>
+
                     </li>
                 </ul>
             </div>
@@ -93,17 +105,15 @@
 
 
 <script type='text/javascript' src='js/zepto.js' charset='utf-8'></script>
-<script type='text/javascript' src='js/jquery.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='js/sm.js' charset='utf-8'></script>
 <!-- 需要用到日历时，请引入该文件,里面整理了相关函数 -->
 <script type='text/javascript' src='js/rili.js' charset='utf-8'></script>
-<script type="text/javascript" src="js/jquery.raty.min.js"></script>
+
 <script>
     $.init();
 
     // 页面加载完成后执行函数
     $(function(){
-        $('#star').raty({ score: 3.26 });
 
         //补零
         function add0(num) {
@@ -173,7 +183,6 @@
             var m = parseInt(ym.substr(5,2))+1;
             y = add0(new Date(y,m,0).getFullYear());
             m = add0(new Date(y,m,0).getMonth()+1);
-            console.info(currYear+'-'+currMonth);
             if((y==currYear||y>currYear) && m>currMonth){
                 $(this).addClass('max');
                 $.alert('没有下个月的数据');
@@ -193,10 +202,10 @@
                     var html = '<p>'+$(this).html()+'</p>';
                     html += '<p>'+obj[key]+'</p>';
                     $(this).html(html);
-                    console.info(html);
                 }
             }
         });
+
     })
 </script>
 </body>

@@ -26,6 +26,7 @@ a{cursor:pointer;text-decoration:none;}
 .aboluo-rilidiv .aboluo-rilitable .aboluo-td-a-xiu{font-size:13px;position:absolute;text-align:left;line-height:14px;text-indent:1px;width:15px;display:block;background:#f43;height:15px;color:#fff;overflow:hidden;top:0px;left:0px;}
 .aboluo-rilidiv .aboluo-rilitable tr td a:hover{border:3px solid #FFBB00;cursor:pointer;}
 .aboluo-rilidiv .aboluo-rilitable tr td .aboluo-aclick{border:3px solid #FFBB00;}
+.aboluo-rilidiv .aboluo-rilitable .aboluo-rilitbody{background: #fff;}
 .aboluo-rilidiv .aboluo-rilitable .aboluo-rilitbody .aboluo-pervMonthDays{color:#BFBFC5;}
 .aboluo-rilidiv .aboluo-rilitable .aboluo-rilitbody .aboluo-nextMonthDays{color:#BFBFC5;}
 .aboluo-rightdiv p{color:#FFFFFF;margin:10px auto;}
