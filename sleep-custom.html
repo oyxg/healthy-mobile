@@ -25,7 +25,10 @@
             <a class="button button-link button-nav pull-left back">
                 <span class="icon icon-left"></span>
             </a>
-            <h1 class="title">自定睡眠</h1>
+            <div class="buttons-row">
+                <a href="sleep.html" class="button button-round " external>我的睡眠</a>
+                <a href="#" class="button button-round active" external>自定睡眠</a>
+            </div>
         </header>
         <div class="content">
             <!-- 这里是页面内容区 -->
@@ -68,8 +71,8 @@
                 <ul>
                     <li>
                         <label>您今天睡眠时间</label>
-                        <input id="inSleep" value="" readonly />—
-                        <input id="outSleep" value="" readonly />
+                        <input id="inSleep" value="00 00" />—
+                        <input id="outSleep" value="00 00" />
                         <lable></lable>
                     </li>
                 </ul>
@@ -195,24 +198,85 @@
             }
         });
 
-        
-        var inSleep = '2016-9-8 21:00:00';//入睡时间
-        var outSleep = '2016-9-9 8:30:00';//清醒时间
 
-        var inH = add0(new Date(inSleep).getHours());//入睡小时
-        var inM = add0(new Date(inSleep).getMinutes());//入睡分钟
-        var outH = add0(new Date(outSleep).getHours());//清醒小时
-        var outM = add0(new Date(outSleep).getMinutes());//清醒分钟
-        $('#inSleep').val(inH+' | '+inM);//入睡时间赋值
-        $('#outSleep').val(outH+' | '+outM);//清醒时间赋值
-
-        //计算睡眠时长
-        var inSleepS = new Date(inSleep).getTime();
-        var outSleepS = new Date(outSleep).getTime();
-        var sleepTimeS = (outSleepS-inSleepS)/1000;//睡眠时长（单位：秒）
-        var h = add0(Math.floor(sleepTimeS/3600));
-        var i = Math.floor(Math.floor(sleepTimeS%3600/60)/60*10);
-        $('#outSleep').next('lable').html(h+'.'+i+'小时');//睡眠时长赋值
+        var hoursArr = [];
+        for (var i=0;i<=24;i++){
+            i = i<=9?'0'+i:i;
+            hoursArr.push(i);
+        }
+        var minutesArr = [];
+        for (var i=0;i<=60;i++){
+            i = i<=9?'0'+i:i;
+            minutesArr.push(i);
+        }
+        $("#inSleep").picker({
+            toolbarTemplate: '<header class="bar bar-nav">\
+  <button class="button button-link pull-right close-picker">确定</button>\
+  <h1 class="title">入睡时间</h1>\
+  </header>',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: hoursArr
+                },
+                {
+                    textAlign: 'center',
+                    values: minutesArr
+                }
+            ],
+            onClose: cleSleepTime()
+        });
+        $("#inSleep").change(function(){
+            cleSleepTime()
+        });
+        $("#outSleep").picker({
+            toolbarTemplate: '<header class="bar bar-nav">\
+  <button class="button button-link pull-right close-picker">确定</button>\
+  <h1 class="title">入睡时间</h1>\
+  </header>',
+            cols: [
+                {
+                    textAlign: 'center',
+                    values: hoursArr
+                },
+                {
+                    textAlign: 'center',
+                    values: minutesArr
+                }
+            ],
+            onClose: cleSleepTime()
+        });
+        $("#outSleep").change(function(){
+            cleSleepTime()
+        });
+        function GetDateStr(AddDayCount) {
+            var dd = new Date();
+            dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期
+            var y = dd.getFullYear();
+            var m = dd.getMonth()+1;//获取当前月份的日期
+            var d = dd.getDate();
+            return y+"-"+m+"-"+d;
+        }
+//        $("#inSleep").picker("open");
+        function cleSleepTime(){
+            var intime = $('#inSleep').val();
+            var inh = intime.substr(0,2);
+            var inm = intime.substr(3,2);
+            var outtime = $('#outSleep').val();
+            var outh = outtime.substr(0,2);
+            var outm = outtime.substr(3,2);
+            var yesterday = GetDateStr(-1);
+            var today = GetDateStr(0);
+            var inSleep = yesterday+' '+inh+':'+inm+':00';////入睡时间
+            var outSleep = today+' '+outh+':'+outm+':00';//清醒时间
+            //计算睡眠时长
+            var inSleepS = new Date(inSleep).getTime();
+            var outSleepS = new Date(outSleep).getTime();
+            var sleepTimeS = (outSleepS-inSleepS)/1000;//睡眠时长（单位：秒）
+            var h = add0(Math.floor(sleepTimeS/3600));
+            var i = Math.floor(Math.floor(sleepTimeS%3600/60)/60*10);
+            $('#outSleep').next('lable').html(h+'.'+i+'小时');//睡眠时长赋值
+        }
 
     });
 
