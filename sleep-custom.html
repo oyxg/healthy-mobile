@@ -71,8 +71,8 @@
                 <ul>
                     <li>
                         <label>您今天睡眠时间</label>
-                        <input id="inSleep" value="00 00" />—
-                        <input id="outSleep" value="00 00" />
+                        <input id="inSleep" value="23 00" />—
+                        <input id="outSleep" value="07 00" />
                         <lable></lable>
                     </li>
                 </ul>
@@ -198,14 +198,19 @@
             }
         });
 
-
+        /**
+         *入睡时间默认为前一天夜里23：00，清醒时间默认今天早上7点。
+         *入睡时间可以设置的范围从前一天下午6点到今天早上六点。
+         *清醒时间可以设置的方位从今天凌晨1点到中午十二点。
+         *睡眠时长不会小于0，也不会大于24
+         */
         var hoursArr = [];
         for (var i=0;i<=24;i++){
             i = i<=9?'0'+i:i;
             hoursArr.push(i);
         }
         var minutesArr = [];
-        for (var i=0;i<=60;i++){
+        for (var i=0;i<=59;i++){
             i = i<=9?'0'+i:i;
             minutesArr.push(i);
         }
@@ -217,7 +222,7 @@
             cols: [
                 {
                     textAlign: 'center',
-                    values: hoursArr
+                    values: ['18','19','20','21','22','23','24','01','02','03','04','05','06']
                 },
                 {
                     textAlign: 'center',
@@ -237,7 +242,7 @@
             cols: [
                 {
                     textAlign: 'center',
-                    values: hoursArr
+                    values: ['01','02','03','04','05','06','07','08','09','10','11','12']
                 },
                 {
                     textAlign: 'center',
@@ -267,14 +272,18 @@
             var outm = outtime.substr(3,2);
             var yesterday = GetDateStr(-1);
             var today = GetDateStr(0);
-            var inSleep = yesterday+' '+inh+':'+inm+':00';////入睡时间
+            var inSleepDate = inh==24?today:(inh<=6?today:yesterday);
+            var inSleep = inSleepDate+' '+(inh==24?'00':inh)+':'+inm+':00';//入睡时间
             var outSleep = today+' '+outh+':'+outm+':00';//清醒时间
+            console.info(inSleep);
             //计算睡眠时长
             var inSleepS = new Date(inSleep).getTime();
             var outSleepS = new Date(outSleep).getTime();
             var sleepTimeS = (outSleepS-inSleepS)/1000;//睡眠时长（单位：秒）
-            var h = add0(Math.floor(sleepTimeS/3600));
+            var h = Math.floor(sleepTimeS/3600);
+            h = add0(h<=0?0:(h>=24?24:h));
             var i = Math.floor(Math.floor(sleepTimeS%3600/60)/60*10);
+            i = i<=0?0:(i>=9?9:i);
             $('#outSleep').next('lable').html(h+'.'+i+'小时');//睡眠时长赋值
         }
 
