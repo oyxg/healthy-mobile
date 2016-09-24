@@ -272,19 +272,18 @@
             var outm = outtime.substr(3,2);
             var yesterday = GetDateStr(-1);
             var today = GetDateStr(0);
-            var inSleepDate = inh==24?today:(inh<=6?today:yesterday);//入睡日期，根据小时判断是今天还是昨天入睡的
+            var inSleepDate = inh==24?today:(inh<=6?today:yesterday);
             var inSleep = inSleepDate+' '+(inh==24?'00':inh)+':'+inm+':00';//入睡时间
             var outSleep = today+' '+outh+':'+outm+':00';//清醒时间
-
+            console.info(inSleep);
             //计算睡眠时长
-            var inSleepS = new Date(inSleep.replace(/-/g, "/")).getTime();
-            var outSleepS = new Date(outSleep.replace(/-/g, "/")).getTime();
+            var inSleepS = new Date(inSleep).getTime();
+            var outSleepS = new Date(outSleep).getTime();
             var sleepTimeS = (outSleepS-inSleepS)/1000;//睡眠时长（单位：秒）
             var h = Math.floor(sleepTimeS/3600);
             h = add0(h<=0?0:(h>=24?24:h));
             var i = Math.floor(Math.floor(sleepTimeS%3600/60)/60*10);
             i = i<=0?0:(i>=9?9:i);
-//            alert(outSleepS);
             $('#outSleep').next('lable').html(h+'.'+i+'小时');//睡眠时长赋值
         }
 
